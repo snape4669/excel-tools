@@ -15,7 +15,7 @@ window.geometry('450x400')
 # 定义一些变量和函数
 source_file = '' # 源文件路径
 target_file = '' # 目标文件路径
-source_sheet = '' # 源文件的sheet名
+source_sheet = '' # 源文件的sheet名 
 target_sheet = '' # 目标文件的sheet名
 source_range = '' # 源文件的数据区域
 target_range = '' # 目标文件的数据区域
