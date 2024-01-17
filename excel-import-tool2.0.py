@@ -304,7 +304,7 @@ class ExcelImportTool(QWidget):
         # 定义目标Excel文件的写入其实位置
         target_start_col,target_start_row,target_max_col,target_max_row = openpyxl.utils.cell.range_boundaries(self.target_range_lineEdit.text())
         try:
-            # 遍历源Excel文件的复制区域，获取每个单元格的值
+                # 遍历源Excel文件的复制区域，获取每个单元格的值
             for i in range(source_min_row, source_max_row + 1):
                     for j in range(source_min_col, source_max_col + 1):
                         # 获取源Excel文件的单元格对象
