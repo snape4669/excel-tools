@@ -158,12 +158,16 @@ class ExcelImportTool(QWidget):
             # 将文本框的内容设置为文件路径
             self.source_file_lineEdit.setText(self.source_file)
             # 用load_workbook方法加载源文件，返回一个workbook对象
-            workbook = load_workbook(self.source_file)
-            # 用workbook对象的sheetnames属性，获取源文件的所有sheet名，返回一个列表
-            self.source_sheet_names = workbook.sheetnames
-            # 将下拉列表的值设置为源文件的sheet名列表
-            self.source_sheet_combox.clear()
-            self.source_sheet_combox.addItems(self.source_sheet_names)
+            try:
+                self.wbs = load_workbook(self.source_file,data_only=True)
+                # 用workbook对象的sheetnames属性，获取源文件的所有sheet名，返回一个列表
+                self.source_sheet_names = self.wbs.sheetnames
+                # 将下拉列表的值设置为源文件的sheet名列表
+                self.source_sheet_combox.clear()
+                self.source_sheet_combox.addItems(self.source_sheet_names)
+            except:
+                QMessageBox.information(self,'提示','未知错误，表格打开失败')
+                self.wbs.close()
 
     # 定义选择源文件的sheet名的方法
     def select_source_sheet(self, sheet):
@@ -180,13 +184,17 @@ class ExcelImportTool(QWidget):
         if self.target_file:
             # 将文本框的内容设置为文件路径
             self.target_file_lineEdit.setText(self.target_file)
-            # 用pd.ExcelFile方法读取目标文件，返回一个ExcelFile对象
-            excel_file = pd.ExcelFile(self.target_file)
-            # 用ExcelFile对象的sheet_names属性，获取目标文件的所有sheet名，返回一个列表
-            self.target_sheet_names = excel_file.sheet_names
-            # 将下拉列表的值设置为目标文件的sheet名列表
-            self.target_sheet_combox.clear()
-            self.target_sheet_combox.addItems(self.target_sheet_names)
+            # 用load_workbook方法读取目标文件，返回一个ExcelFile对象
+            try:
+                self.wbt = load_workbook(self.target_file,data_only=True)
+                # 用ExcelFile对象的sheet_names属性，获取目标文件的所有sheet名，返回一个列表
+                self.target_sheet_names = self.wbt.sheetnames
+                # 将下拉列表的值设置为目标文件的sheet名列表
+                self.target_sheet_combox.clear()
+                self.target_sheet_combox.addItems(self.target_sheet_names)
+            except:
+                QMessageBox.information(self,'提示','未知错误，表格打开失败')
+                self.wbt.close()
 
     # 定义选择目标文件的sheet名的方法
     def select_target_sheet(self, sheet):
@@ -294,10 +302,8 @@ class ExcelImportTool(QWidget):
         # 返回区域范围的表达格式
             return range_str
     def import_data(self):
-        wbs = load_workbook(self.source_file,data_only=True)
-        wss = wbs[self.source_sheet]
-        wbt = load_workbook(self.target_file,data_only=True)
-        wst = wbt[self.target_sheet]
+        wss = self.wbs[self.source_sheet]
+        wst = self.wbt[self.target_sheet]
         # 定义原Excel文件的复制范围
         source_min_col,source_min_row,source_max_col,source_max_row = openpyxl.utils.cell.range_boundaries(self.source_range_lineEdit.text())
 
@@ -318,14 +324,14 @@ class ExcelImportTool(QWidget):
                         target_cell = wst.cell(row=target_row, column=target_col)
                         # 将源Excel文件的单元格值写入目标Excel文件的单元格
                         target_cell.value = source_value
-            wbt.save(self.target_file)
+            self.wbt.save(self.target_file)
             QMessageBox.information(self,'提示','写入成功')
-            wbs.close()
-            wbt.close()
+            self.wbs.close()
+            self.wbt.close()
         except:
             QMessageBox.information(self,'提示','写入失败，请检查表格中是否存在合并单元格')
-            wbs.close()
-            wbt.close()
+            self.wbs.close()
+            self.wbs.close()
     
 if __name__ == '__main__':
 # 创建一个应用对象
