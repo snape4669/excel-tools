@@ -26,10 +26,11 @@ class ExcelImportTool(QWidget):
         self.target_range = '' # 目标文件的数据区域
         self.source_sheet_names = ''
         self.target_sheet_names = ''
-
+        # 创建一个水平布局用来放置下层录入组件
         hbox = QHBoxLayout()
+        # 创建一个垂直布局用来放置所有组件
         vbox = QVBoxLayout()
-        # 创建一个垂直布局
+        # 创建两个垂直布局放置源文件录入组件和目标文件录入组件
         vbox1 = QVBoxLayout()
         vbox2 = QVBoxLayout()
         # 创建一个水平布局，用于放置源文件的相关控件
@@ -62,7 +63,7 @@ class ExcelImportTool(QWidget):
         self.source_sheet_combox.resize(200,50)
         hbox2.addWidget(self.source_sheet_label)
         hbox2.addWidget(self.source_sheet_combox)
-        # 添加选择数据区域的跳转按钮，绑定选择事件，跳转打开新的窗口
+        # 添加选择数据区域的按钮，触发区域选择及返回已选择区域的范围参数
         hbox3 = QHBoxLayout()
         self.source_range_label = QLabel('请填写或选择源文件数据区域')
         self.source_range_label.resize(200,50)
@@ -114,7 +115,7 @@ class ExcelImportTool(QWidget):
         hbox5.addWidget(self.target_sheet_combox)
         # 创建一个水平布局，用于放置目标文件的数据区域选择部分功能
         hbox6 = QHBoxLayout()
-        # 添加选择数据区域的跳转按钮，绑定选择事件，跳转打开新的窗口
+        # 添加选择数据区域的按钮，触发区域选择及返回已选择区域的范围参数
         self.target_range_lable = QLabel('请填写或选择目标文件数据区域')
         self.target_range_lable.resize(200,50)
         self.target_range_button = QPushButton('选择')
